@@ -15,3 +15,97 @@ campos temos nessa condição?
 
 select nome, numero_habitante, id, area 
 from bairros 
+* Foi estabelecido um novo critério para pontuação geral, seguindo a fórmula abaixo:
+(32.4+2*PONTUACAO_GERAL/3.1)
+Aplique ela e diga qual é a pontuação geral nova dos 3 primeiros jogadores?
+
+select nome, (32.4+2*PONTUACAO_GERAL/3.1) as pontuacao from fifa limit 3
+
+* A metragem dos bairros estava incorreta. Faça uma correção no select aumentando em 120 a população de cada
+bairro
+
+select numero_habitante, (numero_habitante + 120) as habitantescom120 
+from bairros
+
+*Faça a soma dos campos de controle de bola, arrancada e agilidade e divida por 3 para trazer uma média dos 3 atributos
+por jogador?
+
+select (controle_de_bola + arrancada + agilidade) /3 as resultado 
+from fifa
+
+* Queremos saber qual é o bairro mais denso de curitiba. Para isso, realize uma pesquisa na tabela bairros diivdindo o
+número de pessoas pela área (km/2). Qual é o bairro mais denso em população?
+
+select nome, (numero_habitante/area) as resultado from bairros
+
+*Quantos jogadores temos com mais de 35 anos?
+
+select nome, idade from fifa where idade > 35
+
+*Quantos jogadores temos com pontuação geral maior que 90?
+
+select nome, pontuacao_geral from fifa where pontuacao_geral > 90 order by pontuacao_geral desc
+
+*Analisando os dados do 156, traga os bairros que tiveram problema com morcegos.
+
+select BAIRRO_ASS, SUBDIVISAO from chamados156 where SUBDIVISAO='Morcegos'
+
+* Quantos jogadores temos com mais de 38 anos e que possuem mais de 80 na pontuação geral na tabela fifa?
+
+select * from fifa where idade > 38 and pontuacao_geral >80
+
+* Quantos jogadores temos da itália que jogam em um dos principais times de lá, juventus ou milan?
+
+select nome, id_nacionalidade  from fifa where id_nacionalidade = 112 and (time='juventus' or time ='Milan')
+
+*função 'in' para usar como lista para facilitar a pesquisa
+select nome, id_nacionalidade  from fifa where id_nacionalidade = 112 and time in('juventus','milan')
+
+*Quantos jogadores possuem energia a partir de 60, idade maior que 30 anos e que não jogam nas posições de
+atacante e zagueiro.
+select * from nacionalidade
+select nome, energia, idade, posicao from fifa where energia >= 60 and idade > 30 and not(posicao='zagueiro' )and not (posicao='atacante')
+
+* Realize uma consulta do nome e pontuação dos jogadores, mas renomeie estes campos com outros nomes(sugestão:
+para o inglês)
+select nome as name, pontuacao_geral as point from fifa 
+
+* Crie no select um campo que representa a densidade populacional por bairro e especifique para ele como nome:
+densidadebairro.
+
+select numero_habitante as densidadedebairro, nome from bairros
+
+* Na tabela de chamados do 156 quantos registros tem o campo orgão nulos?
+
+select * from chamados156 where orgao is not null
+
+* Jogadores sem time são uma ótima oportunidade de compra. Encontre os jogadores sem time e que tenham
+pontuação geral maior ou igual a 80.
+
+* Quantas são e quais as posições possíveis para os jogadores?
+select distinct(posicao) from fifa  
+
+* Quais são as categorias possíveis na tabela do 156?
+select distinct(Tipo) from chamados156
+
+*Qual o jogador com maior arrancada?
+select nome,arrancada from fifa order by arrancada desc
+
+*Qual jogador da Roma tem o maior potencial?
+select nome,potencial,time from fifa where time ='roma' order by potencial desc
+
+* Quem tem a maior média de energia, jogadores da Juventus ou do Milan?
+
+select avg(energia),time from fifa where time ='juventus' 
+72.76
+select avg(energia),time from fifa where time ='Milan'
+68.5925925925926  
+
+* Quanto é a soma de pontuação geral dos jogadores do Everton?
+select sum(pontuacao_geral),time from fifa where time='everton'
+
+* Quantos times tem Atletico em seu nome?
+select count(*),nome , time   from fifa where time like'%atletico%'
+
+* Quais jogadores que jogam em posições da direita do campo e o nome do time começa com a letra A?
+select nome,posicao from fifa where (posicao) like'%direit%' and (time)like'a%'
