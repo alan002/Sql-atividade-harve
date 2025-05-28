@@ -109,3 +109,56 @@ select count(*),nome , time   from fifa where time like'%atletico%'
 
 * Quais jogadores que jogam em posições da direita do campo e o nome do time começa com a letra A?
 select nome,posicao from fifa where (posicao) like'%direit%' and (time)like'a%'
+
+* Quais são os jogadores com a maior pontuação geral no Brasil e na Argentina?
+select fifa.nome, fifa.pontuacao_geral, nacionalidade.pais 
+from fifa join nacionalidade on fifa.id_nacionalidade = nacionalidade.id 
+where nacionalidade.pais in('Brasil','Argentina') order by fifa.pontuacao_geral desc
+
+* Calcule a quantidade de jogadores, separados por país,no time da Roma?
+select fifa.time, nacionalidade.pais, count(nacionalidade.pais) as quantidade 
+from fifa 
+join nacionalidade on fifa.id_nacionalidade = nacionalidade.id 
+where fifa.time = 'Roma' 
+group by fifa.time, nacionalidade.pais
+order by quantidade desc
+
+* Selecione os chamados do 156 retornando o número da solicitação,bairro e area do bairro associado a coluna
+bairro_ass. Porém retornando também os registros que tem bairro_ass nulo.
+select c.solicitacao, c.bairro_ass, b.area 
+from chamados156 c left join bairros b on c.bairro_ass = b.nome 
+order by b.nome
+
+* Os jogadores da Ásia tiveram a pontuação geral aumentada em 1 a mais devido a um erro do sistema. Como ficaria
+agora a média geral da pontuação geral juntando os jogadores da Ásia com os demais?
+select avg(pontuacao_geral) as pontuacao
+from fifa f
+join nacionalidade n on f.id_nacionalidade = n.id
+where n.continente = 'Asia'
+union all 
+select avg(pontuacao_geral) from fifa f join nacionalidade n on f.id_nacionalidade = n.id
+
+* Imprima a data do chamado no 156 no formato mês e ano.
+select (date_format(dt_nasc,"%m-%y")) as data_formatada from funcionario 
+
+* Selecione os jogadores do Brasil com peso acima de 150 lbs. Quantos são?
+select f.nome, replace(f.peso,'lbs','kg') as peso, n.pais  
+from fifa f 
+join nacionalidade n on f.id_nacionalidade = n.id
+where n.pais = 'Brazil' and replace(cast(peso as integer),'lbs','')  > 150 
+order by f.peso
+
+* Qual país da europa tem a média de pontuação geral mais alta? E quais são o segundo e o terceiro colocado?
+
+select n.pais, avg(f.pontuacao_geral)
+from fifa f 
+join nacionalidade n 
+on f.id_nacionalidade = n.id
+where n.continente = 'europa'
+group by  n.pais
+order by 2 desc
+
+* comando para não traser as informações null
+select coalesce(orgao,'sem dados') from chamados156
+* por padrão as informações aparecem "null"
+select orgao from chamados156
