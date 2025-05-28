@@ -19,5 +19,4 @@ Curso prático focado em aplicar SQL em cenários reais de análise de dados e b
 
 ## Autor
 Alan da Costa Saucedo  
-Estudante de Tecnologia da Informação na UFMS  
 
